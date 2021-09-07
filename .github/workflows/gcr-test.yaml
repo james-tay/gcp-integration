@@ -4,7 +4,7 @@ on:
 
 jobs:
   startup:
-    runs-on: google/cloud-sdk:355.0.0-alpine
+    runs-on: ubuntu-20.04
     steps:
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@master

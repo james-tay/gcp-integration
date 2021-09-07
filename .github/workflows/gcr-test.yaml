@@ -3,13 +3,19 @@ on:
   push:
 
 jobs:
+
   startup:
     runs-on: ubuntu-20.04
     steps:
+
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
           version: 312.0.0
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
       - name: Test Google Cloud SDK
-        run: gcloud version
+        run: gcloud compute instances list
 

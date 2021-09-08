@@ -21,5 +21,5 @@ jobs:
           gcloud config set compute/zone ${{ secrets.GCP_COMPUTE_ZONE }}
           gcloud compute start-iap-tunnel sheep-dog 15000 --local-host-port localhost:6444 &
           sh -c 'until nc -z localhost 6444 ; do sleep 1 ; done'
-          curl -v http://localhost:6444
+          curl -s -v http://localhost:6444
 

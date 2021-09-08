@@ -17,7 +17,7 @@ jobs:
           export_default_credentials: true
 
       - name: Setup software we'll need
-        run: apt install -y ca-certificates curl netcat
+        run: sudo apt install -y ca-certificates curl netcat
 
       - name: Test Google Cloud SDK
         run: |

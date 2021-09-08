@@ -16,6 +16,11 @@ jobs:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
 
+      - name: Setup software we'll need
+        run: apt install -y ca-certificates curl netcat
+
       - name: Test Google Cloud SDK
-        run: gcloud compute instances list
+        run: |
+          gcloud compute start-iap-tunnel sheep-dog 15000 --local-host-port localhost:6444 &
+          sh -c 'until nc -z localhost 6444 ; do sleep 1 ; done ; curl http://localhost:6444 '
 

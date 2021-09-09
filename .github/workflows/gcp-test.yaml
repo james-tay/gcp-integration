@@ -26,6 +26,8 @@ jobs:
 
       - name: Take a look around
         run: |
+          echo "I am running as :"
+          id
           echo "Current directory : `pwd`"
           ls -la
           echo "GITHUB_WORKSPACE is : $GITHUB_WORKSPACE"
@@ -34,4 +36,6 @@ jobs:
           df -k
           echo "Processes ..."
           ps aux
+          echo "Now what could be in /mnt ..."
+          ls -la /mnt
 

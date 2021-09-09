@@ -1,4 +1,4 @@
-name: GCP-Test
+name: GCP-Trigger
 on:
   workflow_dispatch:
 

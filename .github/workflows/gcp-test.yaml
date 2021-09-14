@@ -6,6 +6,11 @@ jobs:
 
   startup:
     runs-on: ubuntu-20.04
+
+    env:
+      GCP_HOST: sheep-dog
+      GCP_PORT: 15000
+
     steps:
 
       - name: Setup Google Cloud SDK
@@ -16,26 +21,31 @@ jobs:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
 
-      - name: Test Google Cloud SDK
+      - name: Test Google Cloud SDK and setup IAP tunnel.
         run: |
           gcloud config set compute/zone ${{ secrets.GCP_COMPUTE_ZONE }}
-          gcloud compute instances list
+          gcloud compute start-iap-tunnel \
+            ${{ env.GCP_HOST }} ${{ env.GCP_PORT }} \
+            --local-host-port localhost:${{ env.GCP_PORT }} &
+          sh -c 'until nc -z localhost ${{ env.GCP_PORT }} ; do sleep 1 ; done'
 
       - name: Check out source code
         uses: actions/checkout@v2
 
       - name: Take a look around
         run: |
-          echo "I am running as :"
+          echo -n "I am running as :"
           id
           echo "Current directory : `pwd`"
-          ls -la
-          echo "GITHUB_WORKSPACE is : $GITHUB_WORKSPACE"
-          ls -la $GITHUB_WORKSPACE
-          echo "File systems ..."
-          df -k
-          echo "Processes ..."
-          ps aux
-          echo "Now what could be in /mnt ..."
-          ls -la /mnt
+
+      - name: Do sops decrypt
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/key.json
+        run: |
+          echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} \
+            >${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
+          find . -name "*.sops" -o -name "*[a-z0-9].sops.yaml" | \
+            xargs -L 1 sops -d -i
+          echo "--- sops decrypt test ---
+          cat secrets/demo.sops.yaml
 

@@ -38,7 +38,7 @@ jobs:
           TOOLS_URL: gs://bucket-of-dog-treats/gcp-integration/rke-tools.tar.gz
         run: |
           gsutil cp ${{ env.TOOLS_URL }} /tmp
-          sudo bash -c "cd / ; tar -xvf /tmp/rke-tools.tar.gz"
+          sudo bash -c "cd / ; tar -xpf /tmp/rke-tools.tar.gz"
           echo "--- Test our tools ---"
           helm tiller run -- helm version
 
@@ -46,7 +46,7 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/key.json
         run: |
-          echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} \
+          echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' \
             >${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
           find . -name "*.sops" -o -name "*[a-z0-9].sops.yaml" | \
             xargs -L 1 sops -d -i

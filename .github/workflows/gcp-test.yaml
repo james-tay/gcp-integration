@@ -39,7 +39,6 @@ jobs:
         run: |
           gsutil cp ${{ env.TOOLS_URL }} /tmp
           sudo bash -c "cd / ; tar -xvf /tmp/rke-tools.tar.gz"
-          sudo bash -c "chown -Rh ${{ env.IDENT}} ~runner/.helm"
           echo "--- Test our tools ---"
           helm tiller run -- helm version
 

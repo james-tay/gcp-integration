@@ -51,3 +51,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.sha }}
 
+      - name: Take a look at what got pulled down.
+        run: |
+          ls -la
+

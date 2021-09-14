@@ -50,6 +50,6 @@ jobs:
             >${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
           find . -name "*.sops" -o -name "*[a-z0-9].sops.yaml" | \
             xargs -L 1 sops -d -i
-          echo "--- sops decrypt test ---
+          echo "--- sops decrypt test ---"
           cat secrets/demo.sops.yaml
 

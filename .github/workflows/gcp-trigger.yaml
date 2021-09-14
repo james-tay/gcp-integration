@@ -46,3 +46,8 @@ jobs:
           echo "--- env ---"
           cat /tmp/env
 
+      - name: Try pull down a specific commit by its hash.
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.sha }}
+

@@ -32,11 +32,16 @@ jobs:
       - name: Check out source code
         uses: actions/checkout@v2
 
-      - name: Take a look around
+      - name: Download and unpack our tools.
+        env:
+          IDENT: "runner:docker"
+          TOOLS_URL: gs://bucket-of-dog-treats/gcp-integration/rke-tools.tar.gz
         run: |
-          echo -n "I am running as :"
-          id
-          echo "Current directory : `pwd`"
+          gsutil cp ${{ env.TOOLS_URL }} /tmp
+          sudo bash -c "cd / ; tar -xvf /tmp/rke-tools.tar.gz"
+          sudo bash -c "chown -Rh ${{ env.IDENT}} ~runner/.helm"
+          echo "--- Test our tools ---"
+          helm tiller run -- helm version
 
       - name: Do sops decrypt
         env:

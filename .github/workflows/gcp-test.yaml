@@ -53,3 +53,18 @@ jobs:
           echo "--- sops decrypt test ---"
           cat secrets/demo.sops.yaml
 
+      - name: If we made it here, that means this commit is good, note it down.
+        env:
+          SUCCESS_URL: gs://bucket-of-dog-treats/gcp-integration
+        run: |
+          echo "GITHUB_SHA: $GITHUB_SHA" >/tmp/success.hash
+          echo "GITHUB_REF: $GITHUB_REF" >>/tmp/success.hash
+          echo "GITHUB_ACTOR: $GITHUB_ACTOR" >>/tmp/sucess.hash
+          echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW" >>/tmp/success.hash
+          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY" >>/tmp/success.hash
+          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >>/tmp/success.hash
+          echo "--- success.hash ---"
+          cat /tmp/success.hash
+          echo "--- upload to gcp bucket ---"
+          gsutil cp /tmp/success.hash $SUCCESS_URL
+

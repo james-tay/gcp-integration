@@ -66,5 +66,5 @@ jobs:
           echo "--- success.hash ---"
           cat /tmp/success.hash
           echo "--- upload to gcp bucket ---"
-          gsutil cp /tmp/success.hash $SUCCESS_URL.$GITHUB_SHA
+          gsutil cp /tmp/success.hash $SUCCESS_URL/success.hash.$GITHUB_SHA
 

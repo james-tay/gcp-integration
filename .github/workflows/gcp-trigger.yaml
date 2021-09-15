@@ -34,6 +34,14 @@ jobs:
           sh -c 'until nc -z localhost ${{ env.GCP_PORT }} ; do sleep 1 ; done'
           curl -s -v http://localhost:${{ env.GCP_PORT }}
 
+      - name: Try pull down "success.hash"
+        env:
+          SUCCESS_URL: gs://bucket-of-dog-treats/gcp-integration
+        run: |
+          gsutil cp $SUCCESS_URL/success.hash.$GITHUB_SHA /tmp/success.hash
+          echo "--- success.hash ---"
+          cat /tmp/success.hash
+
       - name: Find out more about our environment.
         run: |
           echo "GITHUB_SHA: $GITHUB_SHA" >/tmp/env

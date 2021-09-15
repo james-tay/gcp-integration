@@ -37,8 +37,9 @@ jobs:
       - name: Try pull down "success.hash"
         env:
           SUCCESS_URL: gs://bucket-of-dog-treats/gcp-integration
+          HASH_FILE: success.hash.${{ github.event.inputs.sha }}
         run: |
-          gsutil cp $SUCCESS_URL/success.hash.$GITHUB_SHA /tmp/success.hash
+          gsutil cp $SUCCESS_URL/$HASH_FILE /tmp/success.hash
           echo "--- success.hash ---"
           cat /tmp/success.hash
 

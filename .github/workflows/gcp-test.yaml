@@ -42,6 +42,7 @@ jobs:
           helm tiller run -- helm version
 
   handle_environment:
+    runs-on: ubuntu-20.04
     needs: startup
     steps:
 

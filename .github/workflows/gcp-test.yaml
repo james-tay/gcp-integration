@@ -34,13 +34,20 @@ jobs:
 
       - name: Download and unpack our tools.
         env:
-          IDENT: "runner:docker"
           TOOLS_URL: gs://bucket-of-dog-treats/gcp-integration/rke-tools.tar.gz
         run: |
           gsutil cp ${{ env.TOOLS_URL }} /tmp
           sudo bash -c "cd / ; tar -xpf /tmp/rke-tools.tar.gz"
           echo "--- Test our tools ---"
           helm tiller run -- helm version
+
+  handle_environment:
+    needs: startup
+    steps:
+
+      - name: see what's in /tmp
+        run: |
+          ls -la /tmp
 
       - name: Do sops decrypt
         env:

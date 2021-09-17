@@ -41,15 +41,6 @@ jobs:
           echo "--- Test our tools ---"
           helm tiller run -- helm version
 
-  handle_environment:
-    runs-on: ubuntu-20.04
-    needs: startup
-    steps:
-
-      - name: see what's in /tmp
-        run: |
-          ls -la /tmp
-
       - name: Do sops decrypt
         env:
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/key.json
@@ -74,5 +65,5 @@ jobs:
           echo "--- success.hash ---"
           cat /tmp/success.hash
           echo "--- upload to gcp bucket ---"
-          gsutil cp /tmp/success.hash $SUCCESS_URL/success.hash.$GITHUB_SHA
+          gsutil cp /tmp/success.hash $SUCCESS_URL/hash.$GITHUB_WORKFLOW.$GITHUB_SHA
 

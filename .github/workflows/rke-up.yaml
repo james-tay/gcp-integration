@@ -1,0 +1,51 @@
+name: RkeUp
+on:
+  push:
+    branches:
+      - "rke-up-*"
+
+jobs:
+
+  startup:
+    runs-on: ubuntu-20.04
+
+    env:
+      GCP_HOST: sheep-dog
+      GCP_PORT: 15000
+
+    steps:
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: 312.0.0
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Test Google Cloud SDK and setup IAP tunnel.
+        run: |
+          gcloud config set compute/zone ${{ secrets.GCP_COMPUTE_ZONE }}
+          gcloud compute start-iap-tunnel \
+            ${{ env.GCP_HOST }} ${{ env.GCP_PORT }} \
+            --local-host-port localhost:${{ env.GCP_PORT }} &
+          sh -c 'until nc -z localhost ${{ env.GCP_PORT }} ; do sleep 1 ; done'
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: If we made it here, that means this commit is good, note it down.
+        env:
+          SUCCESS_URL: gs://bucket-of-dog-treats/gcp-integration
+        run: |
+          echo "GITHUB_SHA: $GITHUB_SHA" >/tmp/success.hash
+          echo "GITHUB_REF: $GITHUB_REF" >>/tmp/success.hash
+          echo "GITHUB_ACTOR: $GITHUB_ACTOR" >>/tmp/sucess.hash
+          echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW" >>/tmp/success.hash
+          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY" >>/tmp/success.hash
+          echo "URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >>/tmp/success.hash
+          echo "--- success.hash ---"
+          cat /tmp/success.hash
+          echo "--- upload to gcp bucket ---"
+          gsutil cp /tmp/success.hash $SUCCESS_URL/hash.$GITHUB_WORKFLOW.$GITHUB_SHA
+

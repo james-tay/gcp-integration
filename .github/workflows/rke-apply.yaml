@@ -1,6 +1,5 @@
 name: RkeApply
 on:
-  push:
   workflow_dispatch:
     inputs:
       sha:
@@ -15,6 +14,7 @@ jobs:
     env:
       GCP_HOST: sheep-dog
       GCP_PORT: 15000
+      SUCCESS_URL: gs://bucket-of-dog-treats/gcp-integration
 
     steps:
 
@@ -37,7 +37,9 @@ jobs:
       - name: Check out source code
         uses: actions/checkout@v2
 
-      - name: Just do a test run.
+      - name: Pretend to work and then delete success hashes in GCP bucket.
         run: |
-          echo "Yay a no-op for ${{ github.event.inputs.sha }}."
+          echo "We will assume that 'rke up' ran successfully."
+          echo "--- deleting git hashes of all previous RkeUp runs ---
+          gsutil rm $SUCCESS_URL/hash.RkeUp.*
 

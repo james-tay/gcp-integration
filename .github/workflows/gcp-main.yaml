@@ -12,6 +12,8 @@ jobs:
     env:
       GCP_HOST: sheep-dog
       GCP_PORT: 15000
+      #TOOLS_URL: gs://bucket-of-dog-treats/gcp-integration/rke-tools.tar.gz
+      TOOLS_URL: gs://invalid-bucket/invalid-path
 
     steps:
 
@@ -35,8 +37,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download and unpack our tools.
-        env:
-          TOOLS_URL: gs://bucket-of-dog-treats/gcp-integration/rke-tools.tar.gz
         run: |
           gsutil cp ${{ env.TOOLS_URL }} /tmp
           sudo bash -c "cd / ; tar -xpf /tmp/rke-tools.tar.gz"

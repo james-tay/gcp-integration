@@ -1,0 +1,42 @@
+name: RkeApply
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: The SHA of a git commit to apply.
+        required: true
+
+jobs:
+
+  Rke-Apply:
+    runs-on: ubuntu-20.04
+
+    env:
+      GCP_HOST: sheep-dog
+      GCP_PORT: 15000
+
+    steps:
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: 312.0.0
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Test Google Cloud SDK and setup IAP tunnel.
+        run: |
+          gcloud config set compute/zone ${{ secrets.GCP_COMPUTE_ZONE }}
+          gcloud compute start-iap-tunnel \
+            ${{ env.GCP_HOST }} ${{ env.GCP_PORT }} \
+            --local-host-port localhost:${{ env.GCP_PORT }} &
+          sh -c 'until nc -z localhost ${{ env.GCP_PORT }} ; do sleep 1 ; done'
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Just do a test run.
+        run: |
+          echo "Yay a no-op for ${{ github.event.inputs.sha }}."
+

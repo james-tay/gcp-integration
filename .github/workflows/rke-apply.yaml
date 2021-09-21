@@ -34,12 +34,23 @@ jobs:
             --local-host-port localhost:${{ env.GCP_PORT }} &
           sh -c 'until nc -z localhost ${{ env.GCP_PORT }} ; do sleep 1 ; done'
 
+      - name: Try pull down "success.hash"
+        env:
+          SUCCESS_URL: gs://bucket-of-dog-treats/gcp-integration
+          HASH_FILE: hash.RkeUp.${{ github.event.inputs.sha }}
+        run: |
+          gsutil cp $SUCCESS_URL/$HASH_FILE /tmp/success.hash
+          echo "--- success.hash ---"
+          cat /tmp/success.hash
+
       - name: Check out source code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.sha }}
 
       - name: Pretend to work and then delete success hashes in GCP bucket.
         run: |
           echo "We will assume that 'rke up' ran successfully."
-          echo "--- deleting git hashes of all previous RkeUp runs ---
+          echo "--- deleting git hashes of all previous RkeUp runs ---"
           gsutil rm $SUCCESS_URL/hash.RkeUp.*
 

@@ -1,5 +1,6 @@
 name: RkeApply
 on:
+  push:
   workflow_dispatch:
     inputs:
       sha:

@@ -8,6 +8,7 @@ on:
       canary:
         description: The statefulset partition number to apply.
         required: false
+        default: 0
 
 jobs:
 
@@ -55,7 +56,7 @@ jobs:
         run: |
           echo "Canary set to ${{ github.event.input.canary }}, terminating."
           /bin/false
-        if: github.event.input.canary > 0
+        if: ${{ github.event.input.canary > 0 }}
 
       - name: Pretend to work and then delete success hashes in GCP bucket.
         run: |

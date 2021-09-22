@@ -54,13 +54,13 @@ jobs:
 
       - name: print canary value
         run: |
-          echo "Canary is (${{ github.event.input.canary }})"
+          echo "Canary is (${{ github.event.inputs.canary }})"
 
       - name: Check if canary is specified and terminate if so
         run: |
-          echo "Canary set to ${{ github.event.input.canary }}, terminating."
+          echo "Canary set to ${{ github.event.inputs.canary }}, terminating."
           /bin/false
-        if: ${{ github.event.input.canary > 0 }}
+        if: ${{ github.event.inputs.canary > 0 }}
 
       - name: Pretend to work and then delete success hashes in GCP bucket.
         run: |

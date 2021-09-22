@@ -67,4 +67,5 @@ jobs:
           echo "We will assume that 'rke up' ran successfully."
           echo "--- deleting git hashes of all previous RkeUp runs ---"
           #gsutil rm $SUCCESS_URL/hash.RkeUp.*
+        if: ${{ github.event.inputs.canary == 0 }}
 

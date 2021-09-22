@@ -55,7 +55,7 @@ jobs:
         run: |
           echo "Canary set to ${{ github.event.input.canary }}, terminating."
           /bin/false
-        if: ${{ github.event.input.canary > 0 }}
+        if: ${{ github.event.input.canary != NULL }}
 
       - name: Pretend to work and then delete success hashes in GCP bucket.
         run: |

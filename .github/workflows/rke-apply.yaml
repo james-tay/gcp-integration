@@ -52,6 +52,10 @@ jobs:
         with:
           ref: ${{ github.event.inputs.sha }}
 
+      - name: print canary value
+        run: |
+          echo "Canary is (${{ github.event.input.canary }})"
+
       - name: Check if canary is specified and terminate if so
         run: |
           echo "Canary set to ${{ github.event.input.canary }}, terminating."
@@ -62,5 +66,5 @@ jobs:
         run: |
           echo "We will assume that 'rke up' ran successfully."
           echo "--- deleting git hashes of all previous RkeUp runs ---"
-          gsutil rm $SUCCESS_URL/hash.RkeUp.*
+          #gsutil rm $SUCCESS_URL/hash.RkeUp.*
 

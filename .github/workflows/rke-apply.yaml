@@ -5,6 +5,9 @@ on:
       sha:
         description: The SHA of a git commit to apply.
         required: true
+      canary:
+        description: The statefulset partition number to apply.
+        required: false
 
 jobs:
 
@@ -47,6 +50,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.sha }}
+
+      - name: Check if canary is specified and terminate if so
+        run: |
+          echo "Canary set to ${{ github.event.input.canary }}, terminating."
+          /bin/false
+        if: ${{ github.event.input.canary > 0 }}
 
       - name: Pretend to work and then delete success hashes in GCP bucket.
         run: |

@@ -18,12 +18,15 @@ jobs:
 
       - name: install wireguard software
         run: |
-          apt-get update
-          apt-get -y install wireguard-dkms
+          sudo apt-get update
+          sudo apt-get -y install wireguard-dkms
 
       - name: setup wireguard
         run: |
-          echo '${{ secrets.WG_PRIVATE_KEY }}' >/etc/wireguard/key.private
-          chmod 400 /etc/wireguard/key.private
-          ls -la /etc/wireguard
+          sudo bash -c "
+            echo '${{ secrets.WG_PRIVATE_KEY }}' >/etc/wireguard/key.private
+            chmod 400 /etc/wireguard/key.private
+            ls -la /etc/wireguard
+          "
+
 

@@ -19,13 +19,14 @@ jobs:
       - name: install wireguard software
         run: |
           sudo apt-get update
-          sudo apt-get -y install wireguard-dkms
+          sudo apt-get -y install wireguard
 
       - name: setup wireguard
+        env:
+          CFG: /etc/wireguard/wg0.conf
+          SVR_PUB: 6+Wmt0y4izSh48Vu9PjK1IH3MmiuiB34RY/0n1TtqkY=
         run: |
           sudo bash -c "
-            CFG=/etc/wireguard/wg0.conf
-            SVR_PUB='6+Wmt0y4izSh48Vu9PjK1IH3MmiuiB34RY/0n1TtqkY='
             echo '${{ secrets.WG_PRIVATE_KEY }}' >/etc/wireguard/key.private
             chmod 400 /etc/wireguard/key.private
             echo '[Interface]'                                  >$CFG

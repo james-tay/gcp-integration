@@ -23,17 +23,17 @@ jobs:
 
       - name: setup wireguard
         env:
-          CFG: /etc/wireguard/wg0.conf
-          MY_KEY: /etc/wireguard/key.private
-          SVR_PUB: 6+Wmt0y4izSh48Vu9PjK1IH3MmiuiB34RY/0n1TtqkY=
+          CFG: "/etc/wireguard/wg0.conf"
+          MY_KEY: "/etc/wireguard/key.private"
+          SVR_PUB: "6+Wmt0y4izSh48Vu9PjK1IH3MmiuiB34RY/0n1TtqkY="
         run: |
           sudo bash -c "
-            echo '${{ secrets.WG_PRIVATE_KEY }}' >$MY_KEY
-            chmod 400 /etc/wireguard/key.private
+            echo '${{ secrets.WG_PRIVATE_KEY }}'                >$MY_KEY
+            chmod 400 $MY_KEY
             echo '[Interface]'                                  >$CFG
             echo 'Address = 192.168.4.135/32'                   >>$CFG
             echo 'ListenPort = 51822'                           >>$CFG
-            echo \"PostUp = wg set %i private-key $MY_KEY"      >>$CFG
+            echo \"PostUp = wg set %i private-key $MY_KEY\"     >>$CFG
             echo '[Peer]'                                       >>$CFG
             echo \"PublicKey = $SVR_PUB\"                       >>$CFG
             echo 'EndPoint = 174.89.145.130:51821'              >>$CFG

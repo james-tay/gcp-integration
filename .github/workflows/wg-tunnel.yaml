@@ -1,0 +1,29 @@
+# IMPORTANT!!!
+#
+# This workflow requires the "WG_PRIVATE_KEY" secret to be present. This
+# will be the private key used when we run in a container.
+
+name: Wireguard-Tunnel
+on:
+  push:
+    branches:
+      - "wg-*"
+
+jobs:
+
+  startup:
+    runs-on: ubuntu-20.04
+
+    steps:
+
+      - name: install wireguard software
+        run: |
+          apt-get update
+          apt-get -y install wireguard-dkms
+
+      - name: setup wireguard
+        run: |
+          echo '${{ secrets.WG_PRIVATE_KEY }}' >/etc/wireguard/key.private
+          chmod 400 /etc/wireguard/key.private
+          ls -la /etc/wireguard
+

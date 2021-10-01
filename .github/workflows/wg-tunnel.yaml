@@ -35,7 +35,7 @@ jobs:
             echo \"PostUp = wg set %i private-key $CFG\"        >>$CFG
             echo '[Peer]'                                       >>$CFG
             echo \"PublicKey = $SVR_PUB\"                       >>$CFG
-            echo 'EndPoint = 174.89.145.130'                    >>$CFG
+            echo 'EndPoint = 174.89.145.13051821'               >>$CFG
             echo 'AllowedIPs = 192.168.0.0/16'                  >>$CFG
             ls -la /etc/wireguard
             cat /etc/wireguard/wg0.conf

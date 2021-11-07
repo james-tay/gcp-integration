@@ -7,6 +7,9 @@ echo "uptime: `uptime`"
 echo "id: `id`"
 echo "pwd: `pwd`"
 
+echo "Processes:"
+ps uxaww
+
 echo "File system:"
 /bin/df -h
 

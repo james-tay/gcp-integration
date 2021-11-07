@@ -4,9 +4,15 @@
 
 echo "hostname: `hostname`"
 echo "uptime: `uptime`"
+echo "id: `id`"
+echo "pwd: `pwd`"
+
 echo "File system:"
-df -h
+/bin/df -h
 
 echo "Network:"
-ip a
+/sbin/ip a
+
+echo "File listing:"
+/bin/ls -laF
 
